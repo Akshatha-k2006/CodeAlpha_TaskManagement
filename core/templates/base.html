@@ -1,0 +1,17 @@
+{% load static %}<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{% block title %}Taskflow{% endblock %}</title>
+<link rel="stylesheet" href="{% static 'core/style.css' %}"></head>
+<body{% if user.is_authenticated %} data-auth="1"{% endif %}>
+{% if user.is_authenticated %}
+<nav class="nav"><a class="logo" href="{% url 'dashboard' %}"><span class="mark">T</span>Taskflow</a>
+<div class="links"><a href="{% url 'dashboard' %}">Dashboard</a><a href="{% url 'dashboard' %}#projects">Projects</a>
+<a href="{% url 'notifications' %}">Notifications <span id="badge" class="badge"{% if not unread_count %} hidden{% endif %}>{{ unread_count }}</span></a>
+<a href="{% url 'profile' %}">Profile</a></div></nav>
+{% endif %}
+<main class="wrap">
+{% for m in messages %}<div class="flash {{ m.tags }}">{{ m }}</div>{% endfor %}
+{% block content %}{% endblock %}</main>
+<div id="toast" class="toast" hidden></div>
+<script src="{% static 'core/app.js' %}"></script>{% block js %}{% endblock %}
+</body></html>

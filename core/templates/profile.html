@@ -1,0 +1,4 @@
+{% extends "base.html" %}{% block content %}<h1>{{ user.username }}</h1><p class="muted">{{ user.email }}</p>
+<form method="post" action="{% url 'logout' %}">{% csrf_token %}<button class="btn ghost">Log out</button></form>
+<h2>Your open tasks</h2><div class="card">{% for t in tasks %}<a class="note" href="{% url 'task_detail' t.id %}">{{ t.title }}<span class="small">{{ t.project.name }}</span></a>
+{% empty %}<p class="muted empty">No open tasks assigned to you.</p>{% endfor %}</div>{% endblock %}

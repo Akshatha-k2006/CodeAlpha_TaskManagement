@@ -1,0 +1,7 @@
+{% extends "base.html" %}{% block title %}Log in · Taskflow{% endblock %}
+{% block content %}<div class="auth"><div class="logo big"><span class="mark">T</span>Taskflow</div>
+<h1>Welcome back</h1><p class="muted">Log in to pick up where your team left off.</p>
+<form method="post" class="card stack">{% csrf_token %}{{ form.as_p }}
+{% if form.errors %}<p class="err">Username or password is incorrect.</p>{% endif %}
+<button class="btn">Log in</button></form>
+<p class="muted">New here? <a href="{% url 'register' %}">Create an account</a></p></div>{% endblock %}

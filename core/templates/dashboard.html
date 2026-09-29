@@ -1,0 +1,8 @@
+{% extends "base.html" %}{% block content %}
+<div class="head"><h1 id="projects">Your projects</h1><a class="btn lg" href="{% url 'project_create' %}">+ Create New Project</a></div>
+<div class="grid">{% for p in projects %}
+<a class="card project" href="{% url 'board' p.id %}"><h3>{{ p.name }}</h3><p class="muted">{{ p.description|truncatechars:80|default:"No description yet." }}</p>
+<div class="bar"><i style="width:{% widthratio p.done p.total 100 %}%"></i></div>
+<p class="small">{{ p.done }} of {{ p.total }} tasks done</p>
+<div class="avatars">{% for m in p.membership_set.all|slice:":5" %}<span title="{{ m.user.username }}">{{ m.user.username|slice:":1"|upper }}</span>{% endfor %}<em class="small">{{ p.membership_set.all|length }} member{{ p.membership_set.all|length|pluralize }}</em></div></a>
+{% empty %}<div class="card empty">You aren't in any projects yet. Create one to start adding tasks.</div>{% endfor %}</div>{% endblock %}

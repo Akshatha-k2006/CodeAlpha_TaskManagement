@@ -1,0 +1,11 @@
+{% extends "base.html" %}{% block title %}{{ project.name }}{% endblock %}{% block content %}
+<div class="head"><div><h1>{{ project.name }}</h1><p class="muted">{{ members|length }} member{{ members|length|pluralize }}{% if is_admin %} · You're an admin{% endif %}</p></div>
+{% if is_admin %}<a class="btn ghost" href="{% url 'project_settings' project.id %}">Project settings</a>{% endif %}</div>
+<div class="board" data-move-url="/tasks/0/move/">{% for key, label, tasks in cols %}
+<section class="col" data-status="{{ key }}"><h2>{{ label }} <span class="count">{{ tasks|length }}</span></h2>
+<div class="cards">{% for t in tasks %}
+<a class="task" draggable="true" data-id="{{ t.id }}" href="{% url 'task_detail' t.id %}"><strong>{{ t.title }}</strong>
+<span class="meta"><span>{% if t.assignee %}{{ t.assignee.username }}{% else %}Unassigned{% endif %}</span><span>{{ t.ncomments }} comment{{ t.ncomments|pluralize }}</span></span></a>{% endfor %}</div>
+<details class="add"><summary>+ Add Task</summary><form method="post" action="{% url 'task_add' project.id %}">{% csrf_token %}
+<input type="hidden" name="status" value="{{ key }}"><input name="title" placeholder="Task title" required><button class="btn sm">Add</button></form></details></section>{% endfor %}</div>{% endblock %}
+{% block js %}<script>initBoard();</script>{% endblock %}

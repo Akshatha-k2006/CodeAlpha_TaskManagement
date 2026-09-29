@@ -1,0 +1,3 @@
+{% extends "base.html" %}{% block content %}<div class="auth"><h1>New project</h1>
+<form method="post" class="card stack">{% csrf_token %}<label>Name<input name="name" required maxlength="100"></label>
+<label>Description<textarea name="description" rows="3"></textarea></label><button class="btn">Create project</button></form></div>{% endblock %}

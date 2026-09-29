@@ -1,0 +1,7 @@
+{% extends "base.html" %}{% block content %}<a class="small" href="{% url 'board' project.id %}">← {{ project.name }}</a><h1>Project settings</h1>
+<div class="split"><form method="post" class="card stack">{% csrf_token %}<input type="hidden" name="action" value="edit"><h2>Details</h2>
+<label>Name<input name="name" value="{{ project.name }}"></label><label>Description<textarea name="description" rows="3">{{ project.description }}</textarea></label><button class="btn">Save details</button></form>
+<section class="card"><h2>Members</h2>{% for m in memberships %}<div class="row"><span>{{ m.user.username }} <em class="small">{{ m.get_role_display }}</em></span>
+<form method="post">{% csrf_token %}<input type="hidden" name="user_id" value="{{ m.user.id }}"><button class="link" name="action" value="toggle">{% if m.role == 'admin' %}Make member{% else %}Make admin{% endif %}</button>
+<button class="link danger" name="action" value="remove">Remove</button></form></div>{% endfor %}
+<form method="post" class="row">{% csrf_token %}<input type="hidden" name="action" value="add"><input name="username" placeholder="Username to add" required><button class="btn sm">Add member</button></form></section></div>{% endblock %}

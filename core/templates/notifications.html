@@ -1,0 +1,3 @@
+{% extends "base.html" %}{% block content %}<h1>Notifications</h1><div class="card" id="nlist">
+{% for n in items %}<a class="note {% if not n.is_read %}new{% endif %}" href="{{ n.link|default:'#' }}">{{ n.message }}<span class="small">{{ n.created|timesince }} ago</span></a>
+{% empty %}<p class="muted empty">Nothing new. You'll see comments, assignments and moves from your projects here.</p>{% endfor %}</div>{% endblock %}

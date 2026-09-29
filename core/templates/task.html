@@ -1,0 +1,15 @@
+{% extends "base.html" %}{% block title %}{{ task.title }}{% endblock %}{% block content %}
+<a class="small" href="{% url 'board' project.id %}">← {{ project.name }}</a>
+<div class="split"><form method="post" class="card stack">{% csrf_token %}
+{% if is_admin %}<input class="titlein" name="title" value="{{ task.title }}">{% else %}<h1>{{ task.title }}</h1>{% endif %}
+<label>Description<textarea name="description" rows="5" {% if not can_edit %}disabled{% endif %}>{{ task.description }}</textarea></label>
+<div class="two"><label>Status<select name="status" {% if not can_edit %}disabled{% endif %}>{% for k, l in statuses %}<option value="{{ k }}" {% if k == task.status %}selected{% endif %}>{{ l }}</option>{% endfor %}</select></label>
+<label>Assignee{% if is_admin %}<select name="assignee"><option value="">Unassigned</option>{% for u in members %}<option value="{{ u.id }}" {% if u == task.assignee %}selected{% endif %}>{{ u.username }}</option>{% endfor %}</select>
+{% else %}<input value="{{ task.assignee.username|default:'Unassigned' }}" disabled>{% endif %}</label></div>
+<label>Due date<input type="date" name="due_date" value="{{ task.due_date|date:'Y-m-d' }}" {% if not is_admin %}disabled{% endif %}></label>
+{% if can_edit %}<button class="btn">Save changes</button>{% else %}<p class="muted small">Only admins and the assignee can edit this task.</p>{% endif %}</form>
+<section class="card"><h2>Comments</h2><div id="comments" data-url="{% url 'comment_add' task.id %}">{% for c in comments %}
+<div class="comment"><b>{{ c.author.username }}</b> <span class="small">{{ c.created|date:"M d, H:i" }}</span><p>{{ c.text }}</p>
+{% if is_admin or c.author == user %}<form method="post" action="{% url 'comment_delete' c.id %}">{% csrf_token %}<button class="link">Delete</button></form>{% endif %}</div>{% endfor %}</div>
+<div class="stack"><textarea id="ctext" rows="3" placeholder="Write a comment"></textarea><button class="btn" id="csend">Post comment</button></div></section></div>{% endblock %}
+{% block js %}<script>initComments();</script>{% endblock %}
